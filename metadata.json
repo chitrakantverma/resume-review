@@ -1,5 +1,5 @@
 {
-  "name": "AI Resume Analyzer",
-  "description": "A professional AI-powered resume analysis tool using Google Gemini to evaluate skills, strengths, and provide actionable feedback.",
+  "name": "Resume Review",
+  "description": "Resume document feedback with a server-side model API and a fictional sample report.",
   "requestFramePermissions": []
 }
