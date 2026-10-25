@@ -11,7 +11,7 @@ import { AnalyzerService } from '../services/analyzer.service';
       
       <div class="w-full max-w-xl animate-fade-in">
         <h2 class="text-3xl font-bold text-center text-white mb-2">Upload Resume</h2>
-        <p class="text-neutral-400 text-center mb-8">Supported formats: PDF, PNG, JPG (Max 5MB)</p>
+        <p class="text-neutral-400 text-center mb-8">Supported formats: PDF, PNG, JPG (Max 2MB)</p>
 
         <div class="glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden">
           
@@ -60,6 +60,7 @@ import { AnalyzerService } from '../services/analyzer.service';
             </div>
           }
 
+          <button type="button" (click)="showSample()" [disabled]="analyzer.isLoading()" class="mt-6 text-sm underline text-neutral-300">View fictional sample report</button>
           <!-- Action Button -->
           <div class="mt-8">
             <button 
@@ -74,7 +75,7 @@ import { AnalyzerService } from '../services/analyzer.service';
         </div>
         
         <p class="text-center text-neutral-600 text-xs mt-6 max-w-md mx-auto">
-          Files are processed in memory for analysis and are not permanently stored on any server.
+          Live analysis sends your resume to the server and Google Gemini. Remove personal contact details first. This app does not implement persistent document storage; provider handling follows your configured Google account terms.
         </p>
       </div>
 
@@ -82,6 +83,7 @@ import { AnalyzerService } from '../services/analyzer.service';
   `
 })
 export class AnalyzeComponent {
+  private readId = 0;
   analyzer = inject(AnalyzerService);
   router = inject(Router);
 
@@ -122,15 +124,19 @@ export class AnalyzeComponent {
 
   handleFile(file: File) {
     this.error.set(null);
+    this.fileBase64.set(null);
+    this.fileName.set('');
+    this.fileMimeType.set('');
+    const readId = ++this.readId;
     
     // Validate size (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      this.error.set('File is too large. Max limit is 5MB.');
+    if (file.size > 2 * 1024 * 1024) {
+      this.error.set('File is too large. Max limit is 2MB.');
       return;
     }
 
     // Validate type
-    const validTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
+    const validTypes = ['application/pdf', 'image/png', 'image/jpeg'];
     if (!validTypes.includes(file.type)) {
       this.error.set('Invalid format. Please upload PDF, JPG, or PNG.');
       return;
@@ -141,15 +147,22 @@ export class AnalyzeComponent {
 
     const reader = new FileReader();
     reader.onload = () => {
+      if (readId !== this.readId) return;
       const result = reader.result as string;
       // Remove data URL prefix (e.g. "data:image/png;base64,")
       const base64Data = result.split(',')[1];
       this.fileBase64.set(base64Data);
     };
     reader.onerror = () => {
+      if (readId !== this.readId) return;
       this.error.set('Failed to read file.');
     };
     reader.readAsDataURL(file);
+  }
+
+  showSample() {
+    this.analyzer.loadSample();
+    this.router.navigate(['/result']);
   }
 
   async startAnalysis() {

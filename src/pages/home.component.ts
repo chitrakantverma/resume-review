@@ -16,20 +16,20 @@ import { AmbientBackgroundComponent } from '../components/ambient-background.com
       <!-- Hero Section -->
       <div class="relative z-10 text-center max-w-3xl animate-fade-in">
         <div class="inline-block px-3 py-1 mb-6 text-xs font-medium tracking-wide text-neutral-400 uppercase border border-neutral-800 rounded-full bg-neutral-900/50 backdrop-blur-sm">
-          Powered by Gemini 2.0 Flash
+          Resume editing assistant
         </div>
         
         <h1 class="text-5xl md:text-7xl font-bold tracking-wide text-white mb-6">
-          AI-Powered <br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 via-neutral-400 to-neutral-600">Resume Intelligence</span>
+          Resume Review <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 via-neutral-400 to-neutral-600">Clearer applications</span>
         </h1>
         
         <p class="text-lg md:text-xl text-neutral-400 mb-4 leading-relaxed max-w-2xl mx-auto">
-          Your resume is more than just a document—it's your professional story. Get the warm, constructive feedback you need to refine it and stand out in a crowded job market.
+          Review the skills, project descriptions and missing details in your resume. Get suggestions you can check and use in your next edit.
         </p>
 
         <p class="text-sm text-neutral-500 font-mono mb-10">
-          Private processing. No sign-up required.
+          Live analysis uses Google Gemini. A fictional sample is available without uploading a file.
         </p>
         
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -51,8 +51,8 @@ import { AmbientBackgroundComponent } from '../components/ambient-background.com
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
             </svg>
           </div>
-          <h3 class="text-xl font-semibold text-white mb-2">Instant Scoring</h3>
-          <p class="text-neutral-400 text-sm leading-relaxed">Know where you stand instantly. We evaluate your resume against top industry standards to give you a clear, objective starting point.</p>
+          <h3 class="text-xl font-semibold text-white mb-2">Document feedback</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">Review model-generated feedback. Scores are subjective suggestions and have not been validated against applicant tracking systems.</p>
         </div>
 
         <!-- Feature 2 -->
@@ -63,7 +63,7 @@ import { AmbientBackgroundComponent } from '../components/ambient-background.com
             </svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-2">Deep Analysis</h3>
-          <p class="text-neutral-400 text-sm leading-relaxed">Go beyond the basics. We uncover your hidden strengths and identify specific technical gaps so you can fix them before applying.</p>
+          <p class="text-neutral-400 text-sm leading-relaxed">Inspect extracted skills and suggested edits against your original document. Check the output before using it.</p>
         </div>
 
         <!-- Feature 3 -->

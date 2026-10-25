@@ -15,7 +15,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
         <div class="mb-12">
           <h2 class="text-2xl font-bold text-white mb-4">Project Objective</h2>
           <p class="text-neutral-300 leading-relaxed mb-4">
-            The primary objective of this system is to leverage Large Language Models (LLMs) to automate the pre-screening process of recruitment. By transforming unstructured resume data (PDF/Image) into structured JSON insights, we reduce human bias and improve candidate evaluation efficiency.
+            Resume Review helps a resume owner inspect document content and plan edits. It converts a PDF or image into model-generated feedback. It does not make hiring decisions, measure actual skill proficiency or demonstrate reduced bias.
           </p>
         </div>
 
@@ -33,8 +33,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
             <div class="flex gap-4">
               <div class="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">2</div>
               <div>
-                <h3 class="text-white font-semibold mb-1">AI Analysis (Gemini 2.0)</h3>
-                <p class="text-neutral-400 text-sm">The multimodal capabilities of Google Gemini 2.0 Flash are utilized to read the document visually and textually. The model is prompted with a strict schema to extract skills, calculate scores, and identify gaps.</p>
+                <h3 class="text-white font-semibold mb-1">Document review (Gemini)</h3>
+                <p class="text-neutral-400 text-sm">A server-side route sends the document to Gemini and validates the returned JSON. The API key stays on the server. Scores and role matches are subjective estimates.</p>
               </div>
             </div>
             <div class="flex gap-4">
@@ -53,7 +53,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="p-4 bg-neutral-900 rounded-lg border border-neutral-800">
               <div class="text-xs text-neutral-500 uppercase">Framework</div>
-              <div class="text-white font-semibold">Angular 19+</div>
+              <div class="text-white font-semibold">Angular 21</div>
             </div>
             <div class="p-4 bg-neutral-900 rounded-lg border border-neutral-800">
               <div class="text-xs text-neutral-500 uppercase">AI Model</div>
