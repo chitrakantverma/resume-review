@@ -1,5 +1,4 @@
 import { Injectable, signal } from '@angular/core';
-import { GoogleGenAI, Type } from '@google/genai';
 
 export interface Skill {
   name: string;
@@ -40,89 +39,12 @@ export class AnalyzerService {
     this.resultSignal.set(null);
 
     try {
-      const apiKey = process.env['API_KEY'];
-      if (!apiKey) {
-        throw new Error('API Key not found');
-      }
-
-      const ai = new GoogleGenAI({ apiKey });
-      
-      const prompt = `
-        You are an expert Senior Technical Recruiter and AI Resume Evaluator. 
-        Analyze the provided resume document strictly. 
-        Provide a professional assessment in the specified JSON format.
-        
-        For skills, estimate a proficiency level (0-100) based on context, years of experience implied, or project complexity.
-        For job roles, estimate a match percentage (0-100).
-        
-        Be critical but constructive. Score purely based on content quality, formatting, and relevance.
-      `;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: {
-          role: 'user',
-          parts: [
-            { text: prompt },
-            {
-              inlineData: {
-                mimeType: mimeType,
-                data: fileBase64
-              }
-            }
-          ]
-        },
-        config: {
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: Type.OBJECT,
-            properties: {
-              resume_score: { type: Type.INTEGER, description: "Overall score from 0 to 100" },
-              technical_skills: { 
-                type: Type.ARRAY, 
-                items: { 
-                  type: Type.OBJECT,
-                  properties: {
-                    name: { type: Type.STRING },
-                    level: { type: Type.INTEGER, description: "Proficiency 0-100" }
-                  }
-                } 
-              },
-              soft_skills: { 
-                type: Type.ARRAY, 
-                items: { 
-                  type: Type.OBJECT,
-                  properties: {
-                    name: { type: Type.STRING },
-                    level: { type: Type.INTEGER, description: "Proficiency 0-100" }
-                  }
-                } 
-              },
-              strengths: { type: Type.ARRAY, items: { type: Type.STRING } },
-              weaknesses: { type: Type.ARRAY, items: { type: Type.STRING } },
-              improvements: { type: Type.ARRAY, items: { type: Type.STRING } },
-              suitable_job_roles: { 
-                type: Type.ARRAY, 
-                items: { 
-                  type: Type.OBJECT,
-                  properties: {
-                    role: { type: Type.STRING },
-                    match: { type: Type.INTEGER, description: "Match percentage 0-100" }
-                  }
-                } 
-              },
-              summary: { type: Type.STRING, description: "A short 2-3 sentence executive summary of the candidate" }
-            },
-            required: ["resume_score", "technical_skills", "soft_skills", "strengths", "weaknesses", "improvements", "suitable_job_roles", "summary"]
-          }
-        }
+      const response = await fetch('/api/analyze', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: fileBase64, mimeType }),
       });
-
-      if (!response.text) {
-        throw new Error('No response from AI');
-      }
-
-      const data = JSON.parse(response.text) as AnalysisResult;
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Analysis failed. Please try again.');
       // Sort skills by level desc for better visualization
       data.technical_skills = data.technical_skills.sort((a, b) => b.level - a.level).slice(0, 8);
       data.soft_skills = data.soft_skills.sort((a, b) => b.level - a.level).slice(0, 6);
@@ -136,6 +58,18 @@ export class AnalyzerService {
     } finally {
       this.loadingSignal.set(false);
     }
+  }
+
+  loadSample() {
+    this.reset();
+    this.resultSignal.set({
+      resume_score: 65, technical_skills: [{name: 'Python (fictional example)', level: 60}], soft_skills: [],
+      strengths: ['Example: the fictional resume includes a small data project.'],
+      weaknesses: ['Example: the project description omits its evaluation method.'],
+      improvements: ['Describe the actual dataset, your role, and the metric you measured.'],
+      suitable_job_roles: [{role: 'Data intern (illustrative)', match: 60}],
+      summary: 'FICTIONAL SAMPLE REPORT. No resume was uploaded or analyzed. Numbers demonstrate the interface and are not validated ATS or hiring scores.',
+    });
   }
 
   reset() {
